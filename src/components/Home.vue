@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <ul>
-      <li v-for="foto in fotos" :key="foto.titulo">
+      <li v-for="foto of fotos" :key="foto.titulo">
         <img :src="foto.url" :alt="foto.titulo">
       </li>
     </ul>
@@ -17,18 +17,13 @@ export default {
   },
   data() {
     return{
-      fotos: [
-        {
-          url:'https://sportbuzz.uol.com.br/media/_versions/corinthians_p000Pmj_widexl.jpeg',
-          titulo: 'logo-corinthians'
-        },
-        {
-          url:'https://www.focus.jor.br/wp-content/uploads/2020/05/Corinthians.jpg',
-          titulo: 'sena-corinthians'
-        },
-      ]
+      fotos: []
     }
   },
+  created(){
+     this.$http.get('http://localhost:3000/v1/fotos')
+      .then(res => this.fotos = res.data, err => console.log(err));
+  }
 }
 </script>
 
