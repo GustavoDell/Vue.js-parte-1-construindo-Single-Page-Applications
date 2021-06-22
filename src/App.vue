@@ -1,26 +1,60 @@
 <template>
-  <Home msg="Alurapic"/>
+  <div class="corpo">
+      <h1 class="centralizado">{{ msg }}</h1>
+      <ul class="lista-fotos">
+        <li class="lista-fotos-item" v-for="foto of fotos" :key="foto.titulo">
+          <Painel :titulo="foto.titulo">
+            <img class="imagem-responsiva" :src="foto.url" :alt="foto.titulo"/>
+          </Painel>
+        </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-import Home from './components/Home.vue'
+import Painel from './components/Painel.vue';
+
 
 export default {
   name: 'App',
-  components: {
-    Home,  
+  props: {
+    
   },
-
+  components: {
+    Painel,  
+  },
+  data () {
+    return{
+      fotos: [],
+      msg: 'Alura'
+    }
+  },
+  created() {
+     
+     this.axios.get('http://localhost:3000/v1/fotos')
+      .then(res => this.fotos = res.data, err => console.log(err));
+     
+  }
+  
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.corpo{
+  font-family: Helvetica, sans-serif;
+  width: 96%;
+  margin: 0px auto;
+}
+.centralizado{
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+.lista-fotos{
+  list-style: none;
+}
+.lista-fotos .lista-fotos-item{
+  display: inline-block;
+}
+.imagem-responsiva{
+  width: 100%;
 }
 </style>
