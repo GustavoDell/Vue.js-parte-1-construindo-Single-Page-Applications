@@ -1,10 +1,13 @@
 <template>
   <div class="corpo">
       <h1 class="centralizado">{{ msg }}</h1>
+
+      <input type="search" class="filtro" @input="filtro = $event.target.value" placeholder="filtre pelo título">
+      
       <ul class="lista-fotos">
-        <li class="lista-fotos-item" v-for="foto of fotos" :key="foto.titulo">
+        <li class="lista-fotos-item" v-for="foto of fotosComFiltro" :key="foto.titulo">
           <Painel :titulo="foto.titulo">
-            <img class="imagem-responsiva" :src="foto.url" :alt="foto.titulo"/>
+            <ImagemResponsiva class="imagem-responsiva" :src="foto.url" :alt="foto.titulo"/>
           </Painel>
         </li>
     </ul>
@@ -13,6 +16,7 @@
 
 <script>
 import Painel from './components/Painel.vue';
+import ImagemResponsiva from "./components/imagemResponsiva.vue";
 
 
 export default {
@@ -21,13 +25,28 @@ export default {
     
   },
   components: {
-    Painel,  
+    Painel,
+    ImagemResponsiva,  
   },
   data () {
     return{
       fotos: [],
-      msg: 'Alura'
+      msg: 'Alura',
+      filtro: ''
     }
+  },
+  computed: {
+
+    fotosComFiltro() {
+      if(this.filtro) {
+        let exp = new RegExp(this.filtro.trim(), 'i');
+        return this.fotos.filter(foto => exp.test(foto.titulo));
+      }else{
+        return this.fotos;
+      }
+
+    } 
+
   },
   created() {
      
@@ -54,7 +73,9 @@ export default {
 .lista-fotos .lista-fotos-item{
   display: inline-block;
 }
-.imagem-responsiva{
+
+.filtro{
+  display: block;
   width: 100%;
 }
 </style>
